@@ -1,3 +1,4 @@
+
 const PORT = process.env.PORT || 8000;
 const express = require('express');
 const axios = require('axios');
@@ -8,12 +9,12 @@ const newspapers = [
 	{
 		name: 'thetimes',
 		address: 'https://www.thetimes.co.uk/environment/climate-change',
-		base: '',
+		base: 'https://www.thetimes.co.uk',
 	},
 	{
 		name: 'guardian',
 		address: 'https://www.theguardian.com/environment/climate-crisis',
-		base: '',
+		base: 'https://www.theguardian.com',
 	},
 	{
 		name: 'telegraph',
@@ -23,67 +24,67 @@ const newspapers = [
 	{
 		name: 'timesofindia',
 		address: 'https://timesofindia.indiatimes.com/home/environment',
-		base: '',
+		base: 'https://timesofindia.indiatimes.com',
 	},
 	{
 		name: 'hindustantimes',
 		address: 'https://www.hindustantimes.com/environment',
-		base: '',
+		base: 'https://www.hindustantimes.com',
 	},
 	{
 		name: 'ndtv',
 		address: 'https://www.ndtv.com/environment',
-		base: '',
+		base: 'https://www.ndtv.com',
 	},
 	{
 		name: 'thehindu',
 		address: 'https://www.thehindu.com/sci-tech/energy-and-environment',
-		base: '',
+		base: 'https://www.thehindu.com',
 	},
 	{
 		name: 'deccanherald',
 		address: 'https://www.deccanherald.com/opinion/environment',
-		base: '',
+		base: 'https://www.deccanherald.com',
 	},
 	{
 		name: 'scroll',
 		address: 'https://scroll.in/topic/environment',
-		base: '',
+		base: 'https://scroll.in',
 	},
 	{
 		name: 'theprint',
 		address: 'https://theprint.in/india/environment/',
-		base: '',
+		base: 'https://theprint.in',
 	},
 	{
 		name: 'bbc',
 		address: 'https://www.bbc.com/news/science_and_environment',
-		base: '',
+		base: 'https://www.bbc.com',
 	},
 	{
 		name: 'cnn',
 		address: 'https://edition.cnn.com/specials/world/cnn-climate',
-		base: '',
+		base: 'https://edition.cnn.com',
 	},
 	{
 		name: 'independent',
 		address: 'https://www.independent.co.uk/environment',
-		base: '',
+		base: 'https://www.independent.co.uk',
 	},
 	{
 		name: 'financialtimes',
 		address: 'https://www.ft.com/climate-capital',
-		base: '',
+		base: 'https://www.ft.com',
 	},
 	{
 		name: 'lemonde',
 		address: 'https://www.lemonde.fr/planete',
-		base: '',
+		base: 'https://www.lemonde.fr',
 	},
 	{
 		name: 'indianexpress',
 		address: 'https://indianexpress.com/about/climate-change-3/',
-		base: '',
+		base: 'https://indianexpress.com',
 	}
 ];
 
@@ -133,3 +134,5 @@ app.get('/news/:newspaperId', (req, res) => {
 		.catch(err => console.log(err));
 });
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
+
+		
