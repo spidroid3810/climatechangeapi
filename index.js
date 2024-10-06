@@ -47,7 +47,7 @@ const newspapers = [
 	},
 	{
 		name: 'scroll',
-		address: 'https://scroll.in/news',
+		address: 'https://scroll.in/latest',
 		base: 'https://scroll.in',
 	},
 	{
