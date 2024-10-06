@@ -42,7 +42,7 @@ const newspapers = [
 	},
 	{
 		name: 'deccanherald',
-		address: 'https://www.deccanherald.com/opinion/environment',
+		address: 'https://www.deccanherald.com/environment',
 		base: '',
 	},
 	{
