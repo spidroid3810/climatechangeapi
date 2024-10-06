@@ -8,12 +8,12 @@ const newspapers = [
 	{
 		name: 'thetimes',
 		address: 'https://www.thetimes.co.uk/environment/climate-change',
-		base: 'https://www.thetimes.co.uk',
+		base: '',
 	},
 	{
 		name: 'guardian',
 		address: 'https://www.theguardian.com/environment/climate-crisis',
-		base: 'https://www.theguardian.com',
+		base: '',
 	},
 	{
 		name: 'telegraph',
@@ -23,140 +23,113 @@ const newspapers = [
 	{
 		name: 'timesofindia',
 		address: 'https://timesofindia.indiatimes.com/home/environment',
-		base: 'https://timesofindia.indiatimes.com',
+		base: '',
 	},
 	{
 		name: 'hindustantimes',
 		address: 'https://www.hindustantimes.com/environment',
-		base: 'https://www.hindustantimes.com',
+		base: '',
 	},
 	{
 		name: 'ndtv',
 		address: 'https://www.ndtv.com/environment',
-		base: 'https://www.ndtv.com',
+		base: '',
 	},
 	{
 		name: 'thehindu',
 		address: 'https://www.thehindu.com/sci-tech/energy-and-environment',
-		base: 'https://www.thehindu.com',
+		base: '',
 	},
 	{
 		name: 'deccanherald',
 		address: 'https://www.deccanherald.com/opinion/environment',
-		base: 'https://www.deccanherald.com',
+		base: '',
 	},
 	{
 		name: 'scroll',
 		address: 'https://scroll.in/topic/environment',
-		base: 'https://scroll.in',
+		base: '',
 	},
 	{
 		name: 'theprint',
 		address: 'https://theprint.in/india/environment/',
-		base: 'https://theprint.in',
+		base: '',
 	},
 	{
 		name: 'bbc',
 		address: 'https://www.bbc.com/news/science_and_environment',
-		base: 'https://www.bbc.com',
+		base: '',
 	},
 	{
 		name: 'cnn',
 		address: 'https://edition.cnn.com/specials/world/cnn-climate',
-		base: 'https://edition.cnn.com',
+		base: '',
 	},
 	{
 		name: 'independent',
 		address: 'https://www.independent.co.uk/environment',
-		base: 'https://www.independent.co.uk',
+		base: '',
 	},
 	{
 		name: 'financialtimes',
 		address: 'https://www.ft.com/climate-capital',
-		base: 'https://www.ft.com',
+		base: '',
 	},
 	{
 		name: 'lemonde',
 		address: 'https://www.lemonde.fr/planete',
-		base: 'https://www.lemonde.fr',
+		base: '',
 	},
 	{
 		name: 'indianexpress',
 		address: 'https://indianexpress.com/about/climate-change-3/',
-		base: 'https://indianexpress.com',
+		base: '',
 	}
 ];
 
 const articles = [];
-
-// Fetch articles from each newspaper
 newspapers.forEach(newspaper => {
 	axios.get(newspaper.address).then(response => {
 		const html = response.data;
 		const $ = cheerio.load(html);
-
-		// Match articles with "latest", "news", or "latest-news" in the href or text
-		$('a', html).each(function () {
-			const title = $(this).text().trim();
+		$('a:contains("climate")', html).each(function () {
+			const title = $(this).text();
 			const url = $(this).attr('href');
-			const href = url ? url.toLowerCase() : '';
-
-			if (href.includes('latest') || href.includes('news') || href.includes('latest-news')) {
-				if (title && url) {
-					articles.push({
-						title,
-						url: newspaper.base ? newspaper.base + url : url,
-						source: newspaper.name,
-					});
-				}
-			}
+			articles.push({
+				title,
+				url: newspaper.base + url,
+				source: newspaper.name,
+			});
 		});
-	}).catch(err => console.log(`Error fetching ${newspaper.name}:`, err));
+	});
 });
-
 app.get('/', (req, res) => {
-	res.json('Welcome to my Latest News API');
+	res.json('Welcome to my Climate Change News API');
 });
-
 app.get('/news', (req, res) => {
 	res.json(articles);
 });
-
-// Fetch articles from specific newspaper based on the ID
 app.get('/news/:newspaperId', (req, res) => {
 	const newspaperId = req.params.newspaperId;
-	const newspaper = newspapers.find(newspaper => newspaper.name === newspaperId);
-
-	if (newspaper) {
-		axios.get(newspaper.address)
-			.then(response => {
-				const html = response.data;
-				const $ = cheerio.load(html);
-				const specificArticles = [];
-
-				// Match articles with "latest", "news", or "latest-news" in the href or text
-				$('a', html).each(function () {
-					const title = $(this).text().trim();
-					const url = $(this).attr('href');
-					const href = url ? url.toLowerCase() : '';
-
-					if (href.includes('latest') || href.includes('news') || href.includes('latest-news')) {
-						if (title && url) {
-							specificArticles.push({
-								title,
-								url: newspaper.base + url,
-								source: newspaperId,
-							});
-						}
-					}
+	const newspaperAddress = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].address;
+	const newspaperBase = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].base;
+	axios
+		.get(newspaperAddress)
+		.then(response => {
+			const html = response.data;
+			const $ = cheerio.load(html);
+			const specificArticles = [];
+			$('a:contains("climate")', html).each(function () {
+				const title = $(this).text();
+				const url = $(this).attr('href');
+				specificArticles.push({
+					title,
+					url: newspaperBase + url,
+					source: newspaperId,
 				});
-				res.json(specificArticles);
-			})
-			.catch(err => console.log(err));
-	} else {
-		res.status(404).json({ message: "Newspaper not found" });
-	}
+			});
+			res.json(specificArticles);
+		})
+		.catch(err => console.log(err));
 });
-
-app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
-
+app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
